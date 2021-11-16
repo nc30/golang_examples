@@ -1,5 +1,6 @@
 /*
-	- https://pkg.go.dev/context
+	- https://pkg.go.dev/context#WithCancel
+	- https://pkg.go.dev/context#WithTimeout
 */
 package main
 
@@ -16,15 +17,13 @@ func basic() {
 	defer cancel()
 
 	go func() {
-		// これが重要
+		// 関数終了時にcontextへ終了通知を送る
 		defer cancel()
-
 
 		log.Println("waiting 3 seconds...")
 		time.Sleep(time.Second * 3)
 		log.Println("done!")
 	}()
-
 
 	<-ctx.Done()
 
@@ -34,26 +33,23 @@ func basic() {
 	*/
 }
 
-
 // 通信系の処理などタイムアウトが必要な場合はcontextのTimeout機能を使うといい
 // WithTimeoutやSleepの時間を変えて挙動を調べてみよう
 func withTimeout() {
 	ctx := context.Background()
 
 	// withCancelの変わりにWithTimeoutを使用する。
-	ctx, cancel := context.WithTimeout(ctx, time.Second * 5)
+	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
 	go func() {
-
+		// 関数終了時にcontextへ終了通知
 		defer cancel()
-
 
 		log.Println("waiting 3 seconds...")
 		time.Sleep(time.Second * 3)
 		log.Println("done!")
 	}()
-
 
 	<-ctx.Done()
 
@@ -69,7 +65,6 @@ func withTimeout() {
 		2021/11/15 19:32:20 true
 	*/
 }
-
 
 func main() {
 	basic()

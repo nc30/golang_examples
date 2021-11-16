@@ -5,6 +5,9 @@ import (
 	"time"
 )
 
+// goroutineはpythonで言うthureadingのようにfunction単位で並列処理を行う
+// go言語の花形とも言えるもので、多言語よりも簡単で安全に行うことができる
+// 今回は一次関数として渡しているが、もちろん関数を渡すことでも動かすことができる
 func main() {
 	end := make(chan interface{}, 0)
 
@@ -15,7 +18,6 @@ func main() {
 
 		end <- nil
 	}() // 最後の()が重要
-
 
 	// goroutineが途中だろうがメイン関数が終了すれば容赦なく途中で終了してしまう
 	// そのためwait処理は必ず必要になる。
