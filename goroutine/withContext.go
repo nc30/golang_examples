@@ -1,6 +1,7 @@
 /*
-	- https://pkg.go.dev/context#WithCancel
-	- https://pkg.go.dev/context#WithTimeout
+	docs:
+		- https://pkg.go.dev/context#WithCancel
+		- https://pkg.go.dev/context#WithTimeout
 */
 package main
 

@@ -1,5 +1,6 @@
 /*
-	- https://pkg.go.dev/sync#WaitGroup
+	docs:
+		- https://pkg.go.dev/sync#WaitGroup
 */
 package main
 
