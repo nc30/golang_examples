@@ -20,6 +20,9 @@ func getNow() {
 
 	log.Println("--- Get now")
 
+	// goにおける時刻はtime.Timeで表現する。
+	// pythonにおけるdatetime.datetimeで、jsで言うところのDate
+
 	// Timezoneのデフォルトは/etc/localtime つまり動作環境のローカルタイムゾーンとなる
 	// TZ=Australia/Sydney go run time/basic.go のようにタイムゾーンを指定して試してみよう
 	now = time.Now()
@@ -29,9 +32,13 @@ func getNow() {
 	// UTCが欲しい場合はUTC()を使う
 	log.Println(now.UTC()) // 2022-01-25 03:25:58.039466266 +0000 UTC
 
-	// ローカルタイムゾーンが必要な場合はLocal()を使う
+	// ローカルタイムゾーンでのオブジェクトが必要な場合はLocal()を使う
 	// (別の方法でtime.Timeを作った場合など)
-	log.Println(now.Local()) // 2022-01-25 12:25:58.039466266 +0900 JST m=+0.000108249
+	// 試しにUTC版を作ってローカルに戻してみる
+	log.Println(now.UTC().Local()) // 2022-01-25 12:25:58.039466266 +0900 JST
+
+	// オブジェクトのタムゾーン取得
+	log.Println(now.Zone()) // JST 32400
 
 	// UnixTimeの取得 (int64であることに注意)
 	log.Println(now.Unix()) // 1643085657
@@ -55,10 +62,11 @@ func getNow() {
 
 // タイムゾーンの取得
 func getTimeZone() {
+	log.Println("--- Get Timezone")
+
 	var timezone *time.Location
 	var err error
 
-	log.Println("--- Get Timezone")
 	// タイムゾーン(*time.Locale)を取得するにはtime.LoadLocation()を使用する
 	// タイムゾーンは"UTC"でUTC、"Local"でローカルタイムゾーン
 	// そしてIANAデータベースのものを引っ張ってくる。
@@ -66,7 +74,7 @@ func getTimeZone() {
 	// https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 	// ドキュメントを読む限りだと/usr/share/zoneinfo/にオリジナルのタイムゾーンを入れると
-	// それも取れそうではありますが、基本的に悪手です
+	// それも取れそうではありますが、どう考えても悪手
 
 	timezone, err = time.LoadLocation("Asia/Tokyo")
 	if err != nil {
@@ -84,11 +92,21 @@ func getTimeZone() {
 
 	// timeパッケージのデフォルトタイムゾーンはtime.Localで変更できる
 	// 影響範囲が大きいため使用する場合は要注意
-	tz, _ := time.LoadLocation("MST")
-	time.Local = tz
+	timezone, _ = time.LoadLocation("MST")
+	time.Local = timezone
 
 	// MST -25200
 	log.Println(time.Now().Zone())
+
+
+	// time.Timeオブジェクトのタイムゾーンを変える場合は
+	// time.Time.In()を使う
+	now := time.Now()
+
+	log.Println(now) // 2022-06-15 19:38:55.117055228 -0700 MST m=+0.000226941
+
+	timezone, _ = time.LoadLocation("Australia/Sydney")
+	log.Println(now.In(timezone)) // 2022-06-16 12:38:55.117055228 +1000 AEST
 }
 
 func main() {
