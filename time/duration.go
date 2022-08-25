@@ -1,5 +1,5 @@
 /*
-	timeパッケージを使った現在時刻の取得・タイムゾーン処理
+	timeパッケージを使ったDuration処理の基本
 
 	doc:
 	  - https://pkg.go.dev/time#Duration
