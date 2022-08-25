@@ -74,7 +74,9 @@ func getTimeZone() {
 	// https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 	// ドキュメントを読む限りだと/usr/share/zoneinfo/にオリジナルのタイムゾーンを入れると
-	// それも取れそうではありますが、どう考えても悪手
+	// それも取れそうではありますが、悪手じゃないでしょうか
+
+	// alpineLinuxを使う場合はtzdataをインストールしないとerrが戻ってきます。docker軽量化勢は要注意
 
 	timezone, err = time.LoadLocation("Asia/Tokyo")
 	if err != nil {
